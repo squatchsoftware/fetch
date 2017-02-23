@@ -1,0 +1,116 @@
+{
+    "serviceRequest": {
+        "version": "1.0",
+        "session": {
+            "new": true,
+            "sessionId": "amzn1.echo-api.session.b0c340dd-d60e-4b31-a73d-b408a5714643",
+            "application": {
+                "applicationId": "amzn1.ask.skill.5638ea18-075b-4ffe-9b2e-c0e40531664a"
+            },
+            "user": {
+                "userId": "amzn1.ask.account.AGRY3BLJHFG3S3MCAID5GR3JB3F6MXJROZ5SWS3CPJN7FOIYDKGHVVBH5IHMRNILCMG25BRY4QRF2U33EPPBXFDJUN6G4JDT2UNPVYT22PVJTHWF6GFZ5TSZMSO2ZTX2XYTNAI6F3ZVY33L7XLGPYBO3G2GMLJQHCA4NET6CIDYS66CGFJ4DZNGPVEAXEO2VM7ZXLDEPK23NR5Q",
+                "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9iY2E3MTRiMS0xYWI2LTQwZWUtYmEwMS0yZDc0NTg5NjNmMDEvIiwiaWF0IjoxNDg3Nzk1NjY4LCJuYmYiOjE0ODc3OTU2NjgsImV4cCI6MTQ4Nzc5OTU2OCwiYWNyIjoiMSIsImFpbyI6Ik5BIiwiYW1yIjpbInB3ZCJdLCJhcHBfZGlzcGxheW5hbWUiOiJmZXRjaCIsImFwcGlkIjoiNmU0NWFmNGItMGNjZC00NDk1LWJiZGMtM2M3ZjkyZTA1ZjgyIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJTcXVhdGNoIFNvZnR3YXJlIiwiZ2l2ZW5fbmFtZSI6IlNxdWF0Y2giLCJpcGFkZHIiOiIxMC4wLjAuMSIsIm5hbWUiOiJTcXVhdGNoIFNvZnR3YXJlIiwib2lkIjoiNjcyZDBlNTItNjZjYi00YTAyLWE3OTItNDY4ZmFlOTZkYTMxIiwicGxhdGYiOiIzIiwicHVpZCI6IjEwMDMwMDAwODFBRDcxNkYiLCJzY3AiOiJDYWxlbmRhcnMuUmVhZCBDYWxlbmRhcnMuUmVhZC5TaGFyZWQgQ29udGFjdHMuUmVhZCBNYWlsYm94U2V0dGluZ3MuUmVhZFdyaXRlIFVzZXIuUmVhZCIsInN1YiI6IlVrbUUyT2VhV0I5RkRHd0dwbjh5a1N3aFV5aXBYRTBvektTR0tkekk2UGciLCJ0aWQiOiJiY2E3MTRiMS0xYWI2LTQwZWUtYmEwMS0yZDc0NTg5NjNmMDEiLCJ1bmlxdWVfbmFtZSI6InNxdWF0Y2h5Y29kZUBzcXVhdGNoc29mdHdhcmUuY29tIiwidXBuIjoic3F1YXRjaHljb2RlQHNxdWF0Y2hzb2Z0d2FyZS5jb20iLCJ2ZXIiOiIxLjAifQ.uSSrAh1kIQD34FZM21XuoDGuCaktJ5g9qMXZMg3xQvo"
+            }
+        },
+        "context": {
+            "AudioPlayer": {
+                "playerActivity": "IDLE"
+            },
+            "System": {
+                "application": {
+                    "applicationId": "amzn1.ask.skill.5638ea18-075b-4ffe-9b2e-c0e40531664a"
+                },
+                "user": {
+                    "userId": "amzn1.ask.account.AGRY3BLJHFG3S3MCAID5GR3JB3F6MXJROZ5SWS3CPJN7FOIYDKGHVVBH5IHMRNILCMG25BRY4QRF2U33EPPBXFDJUN6G4JDT2UNPVYT22PVJTHWF6GFZ5TSZMSO2ZTX2XYTNAI6F3ZVY33L7XLGPYBO3G2GMLJQHCA4NET6CIDYS66CGFJ4DZNGPVEAXEO2VM7ZXLDEPK23NR5Q",
+                    "accessToken": "eyJ0eXAiOiJKV1QiLCJub25jZSI6IkFRQUJBQUFBQUFEUk5ZUlEzZGhSU3JtLTRLLWFkcENKeEhlU3Rhd0YwZDJBdllZY2tFMHhqUjBlbFZNakthMllOQkxDcVR6a2tQeXM0MU9mb2ZESU5iczJCaG1LbG1DOWNER0ZpbFdpSHkzVEdyMG1wTE1KaVNBQSIsImFsZyI6IlJTMjU2IiwieDV0IjoiX1VncVhHX3RNTGR1U0oxVDhjYUh4VTdjT3RjIiwia2lkIjoiX1VncVhHX3RNTGR1U0oxVDhjYUh4VTdjT3RjIn0.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9iY2E3MTRiMS0xYWI2LTQwZWUtYmEwMS0yZDc0NTg5NjNmMDEvIiwiaWF0IjoxNDg3Nzk1NjY4LCJuYmYiOjE0ODc3OTU2NjgsImV4cCI6MTQ4Nzc5OTU2OCwiYWNyIjoiMSIsImFpbyI6Ik5BIiwiYW1yIjpbInB3ZCJdLCJhcHBfZGlzcGxheW5hbWUiOiJGZXRjaCIsImFwcGlkIjoiNmU0NWFmNGItMGNjZC00NDk1LWJiZGMtM2M3ZjkyZTA1ZjgyIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJGaWVsZCIsImdpdmVuX25hbWUiOiJCaWciLCJpcGFkZHIiOiIxNjcuMjIwLjEuNzYiLCJuYW1lIjoiQmlnRmllbGQiLCJvaWQiOiI2NzJkMGU1Mi02NmNiLTRhMDItYTc5Mi00NjhmYWU5NmRhMzEiLCJwbGF0ZiI6IjMiLCJwdWlkIjoiMTAwMzAwMDA4MUFENzE2RiIsInNjcCI6IkNhbGVuZGFycy5SZWFkIENhbGVuZGFycy5SZWFkLlNoYXJlZCBDb250YWN0cy5SZWFkIE1haWxib3hTZXR0aW5ncy5SZWFkV3JpdGUgVXNlci5SZWFkIiwic3ViIjoiVWttRTJPZWFXQjlGREd3R3BuOHlrU3doVXlpcFhFMG96S1NHS2R6STZQZyIsInRpZCI6ImJjYTcxNGIxLTFhYjYtNDBlZS1iYTAxLTJkNzQ1ODk2M2YwMSIsInVuaXF1ZV9uYW1lIjoiYmlnZmllbGRAYmlnZmllbGRzLm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6ImJpZ2ZpZWxkQGJpZ2ZpZWxkcy5vbm1pY3Jvc29mdC5jb20iLCJ2ZXIiOiIxLjAifQ.b4Dp7srdb1xDSO48sE8BrmRewWcDE_HKyhQHkZpEoNwL7LsYQrcqeaOCAUmV_hCAXJJOXNPM2BxGV5o8Y8cH8kvzzWZeBAEMMJjeGngEIAJSwgc-3Ez5KMC7DojKsCOMtBq0kKdm85t4r5eVYHdgrrY8pTN9oSjxggMuIMWluzyjN8sE_0D0in2ohDziFxwM2x8iQxG8UiC2rFJfg7U_LJ2pDaXYmY5A0x1CAREejJqPByQyB4yCTLbTfk2IJyKHJabz7m1r_IlAmpjclwLi28qSc3xaPWc_XUrLBHisf-l3FBF4FAm8EnNYKAO7DARe6xlX3PWn2USZoW1w98xQxw"
+                },
+                "device": {
+                    "supportedInterfaces": {
+                        "AudioPlayer": {}
+                    }
+                }
+            }
+        },
+        "request": {
+            "type": "IntentRequest",
+            "requestId": "amzn1.echo-api.request.4e8cbdd9-70d5-415f-8399-5ee22fae66f2",
+            "timestamp": "2017-02-22T21:10:03Z",
+            "locale": "en-US",
+            "intent": {
+                "name": "fetchEventsIntent",
+                "slots": {
+                    "date": {
+                        "name": "date",
+                        "value": "2017-W08-WE"
+                    },
+                    "time": {
+                        "name": "time"
+                    }
+                }
+            }
+        }
+    },
+    "graphMailBoxSettingsRequest": "https://graph.microsoft.com/v1.0/me/mailboxSettings?$select=timeZone",
+    "graphMailBoxSettingsResponseError": null,
+    "graphMailBoxSettingsResponse": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('672d0e52-66cb-4a02-a792-468fae96da31')/mailboxSettings",
+        "timeZone": "Pacific Standard Time",
+        "automaticRepliesSetting": {
+            "status": "disabled",
+            "externalAudience": "all",
+            "internalReplyMessage": "",
+            "externalReplyMessage": "",
+            "scheduledStartDateTime": {
+                "dateTime": "2017-02-22T21:00:00.0000000",
+                "timeZone": "UTC"
+            },
+            "scheduledEndDateTime": {
+                "dateTime": "2017-02-23T21:00:00.0000000",
+                "timeZone": "UTC"
+            }
+        },
+        "language": {
+            "locale": "en-US",
+            "displayName": "English (United States)"
+        }
+    },
+    "graphcalendarViewRequest": "https://graph.microsoft.com/v1.0/me/calendar/calendarView?$select=start,end,subject,location,bodyPreview,isAllDay&$orderby=start/dateTime&$top=50&startDateTime=2017-02-25T08:00:00.000Z&endDateTime=2017-02-27T08:00:00.000Z",
+    "graphcalendarViewResponseError": null,
+    "graphcalendarViewResponse": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('672d0e52-66cb-4a02-a792-468fae96da31')/calendar/calendarView(start,end,subject,location,bodyPreview,isAllDay)",
+        "value": [
+            {
+                "@odata.etag": "W/\"TB/n1Dmzz0uF2v8Vdeh1gwAAsy9NnA==\"",
+                "id": "AAMkADYxYmY2YjRmLWZjY2MtNDUzYS1iMTg2LWY2NDY0ZjA5MzhmMQBGAAAAAABoHxEgN2VYTqDmvl6RhGisBwBbfyk4noTmRqOiCl-hQXwEAAAAvqfoAABMH_fUObPPS4Xa-xV16HWDAACy_tz7AAA=",
+                "subject": "Play Frisbee",
+                "bodyPreview": "",
+                "isAllDay": false,
+                "start": {
+                    "dateTime": "2017-02-25T08:00:00.0000000",
+                    "timeZone": "UTC"
+                },
+                "end": {
+                    "dateTime": "2017-02-25T08:30:00.0000000",
+                    "timeZone": "UTC"
+                },
+                "location": {
+                    "displayName": "",
+                    "address": {}
+                }
+            }
+        ]
+    },
+    "serviceResponseSucceed": {
+        "version": "1.0",
+        "response": {
+            "outputSpeech": {
+                "type": "SSML",
+                "ssml": "<speak> <s>there is one event</s><s>On Saturday, February 25 at 12:00 AM there is Play Frisbee</s> </speak>"
+            },
+            "shouldEndSession": true
+        },
+        "sessionAttributes": {
+            "timeZone": "America/Tijuana"
+        }
+    }
+}

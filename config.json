@@ -1,0 +1,24 @@
+/* Fetch default configuration settings */
+{
+    /* fetch skill settings */
+
+    /* path to config.json.user file that overrides settings in this file. 
+        Used for setting per user items such as allowedAppIds don't want checked into repo
+        The ./user/ folder is in .gitignore.
+    */
+    "configUserOverrideFile": "./user/config.user.json",
+
+    // Flag for if should piiScrub what is written out to logs.
+    // !!Always should be true for Production deployments
+    "piiScrub": true,
+
+    // AppIds that recognize.
+    /* add appIds that are allowed in your config.user.json */
+    "allowedAppIds": {
+        "amzn1.ask.skill.BADVALUE": "lambda"
+    },
+
+    /* fetchRecorder settings */
+    "enableFetchRecorder": false, // Set enableFetchRecorder to true for recording to be enabled.
+    "recorderOutputDirectory": "./test/skillrequests/"
+}

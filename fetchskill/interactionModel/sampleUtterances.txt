@@ -1,0 +1,8 @@
+fetchEventsIntent whats happening {date}
+fetchEventsIntent whats happening {time}
+fetchEventsIntent whats happening {date} at {time}
+fetchEventsIntent whats happening this {time}
+fetchEventsIntent what is happening {date} at {time}
+fetchEventsIntent what is happening {date}
+fetchEventsIntent what is happening on {date}
+fetchEventsIntent what is happening on {date} at {time}

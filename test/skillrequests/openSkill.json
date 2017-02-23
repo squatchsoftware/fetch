@@ -1,0 +1,60 @@
+{
+    "serviceRequest": {
+        "version": "1.0",
+        "session": {
+            "new": true,
+            "sessionId": "amzn1.echo-api.session.e6928ee9-3f5e-4021-98cc-e5df58f5f3f9",
+            "application": {
+                "applicationId": "amzn1.ask.skill.5638ea18-075b-4ffe-9b2e-c0e40531664a"
+            },
+            "user": {
+                "userId": "amzn1.ask.account.AGRY3BLJHFG3S3MCAID5GR3JB3F6MXJROZ5SWS3CPJN7FOIYDKGHVVBH5IHMRNILCMG25BRY4QRF2U33EPPBXFDJUN6G4JDT2UNPVYT22PVJTHWF6GFZ5TSZMSO2ZTX2XYTNAI6F3ZVY33L7XLGPYBO3G2GMLJQHCA4NET6CIDYS66CGFJ4DZNGPVEAXEO2VM7ZXLDEPK23NR5Q",
+                "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9iY2E3MTRiMS0xYWI2LTQwZWUtYmEwMS0yZDc0NTg5NjNmMDEvIiwiaWF0IjoxNDg3NzkwOTYzLCJuYmYiOjE0ODc3OTA5NjMsImV4cCI6MTQ4Nzc5NDg2MywiYWNyIjoiMSIsImFpbyI6Ik5BIiwiYW1yIjpbInB3ZCJdLCJhcHBfZGlzcGxheW5hbWUiOiJmZXRjaCIsImFwcGlkIjoiNmU0NWFmNGItMGNjZC00NDk1LWJiZGMtM2M3ZjkyZTA1ZjgyIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJTcXVhdGNoIFNvZnR3YXJlIiwiZ2l2ZW5fbmFtZSI6IlNxdWF0Y2giLCJpcGFkZHIiOiIxMC4wLjAuMSIsIm5hbWUiOiJTcXVhdGNoIFNvZnR3YXJlIiwib2lkIjoiNjcyZDBlNTItNjZjYi00YTAyLWE3OTItNDY4ZmFlOTZkYTMxIiwicGxhdGYiOiIzIiwicHVpZCI6IjEwMDMwMDAwODFBRDcxNkYiLCJzY3AiOiJDYWxlbmRhcnMuUmVhZCBDYWxlbmRhcnMuUmVhZC5TaGFyZWQgQ29udGFjdHMuUmVhZCBNYWlsYm94U2V0dGluZ3MuUmVhZFdyaXRlIFVzZXIuUmVhZCIsInN1YiI6IlVrbUUyT2VhV0I5RkRHd0dwbjh5a1N3aFV5aXBYRTBvektTR0tkekk2UGciLCJ0aWQiOiJiY2E3MTRiMS0xYWI2LTQwZWUtYmEwMS0yZDc0NTg5NjNmMDEiLCJ1bmlxdWVfbmFtZSI6InNxdWF0Y2h5Y29kZUBzcXVhdGNoc29mdHdhcmUuY29tIiwidXBuIjoic3F1YXRjaHljb2RlQHNxdWF0Y2hzb2Z0d2FyZS5jb20iLCJ2ZXIiOiIxLjAifQ.uqHF6jLR9n0JgwjuubEvR3smz1E8SLtYPhWjycKKgj4"
+            }
+        },
+        "context": {
+            "AudioPlayer": {
+                "playerActivity": "IDLE"
+            },
+            "System": {
+                "application": {
+                    "applicationId": "amzn1.ask.skill.5638ea18-075b-4ffe-9b2e-c0e40531664a"
+                },
+                "user": {
+                    "userId": "amzn1.ask.account.AGRY3BLJHFG3S3MCAID5GR3JB3F6MXJROZ5SWS3CPJN7FOIYDKGHVVBH5IHMRNILCMG25BRY4QRF2U33EPPBXFDJUN6G4JDT2UNPVYT22PVJTHWF6GFZ5TSZMSO2ZTX2XYTNAI6F3ZVY33L7XLGPYBO3G2GMLJQHCA4NET6CIDYS66CGFJ4DZNGPVEAXEO2VM7ZXLDEPK23NR5Q",
+                    "accessToken": "eyJ0eXAiOiJKV1QiLCJub25jZSI6IkFRQUJBQUFBQUFEUk5ZUlEzZGhSU3JtLTRLLWFkcENKLWl2cVpRZHRHU0lXNHAzLUItVVlJR3RvNDBuc1V1RzBSbUVkWVQ5ZFQ3SUdJNkxQZWdYcTVmakd4S0dNeXhCbk9UT3FJQTVYUTZnUjY4S2N4amFNUHlBQSIsImFsZyI6IlJTMjU2IiwieDV0IjoiX1VncVhHX3RNTGR1U0oxVDhjYUh4VTdjT3RjIiwia2lkIjoiX1VncVhHX3RNTGR1U0oxVDhjYUh4VTdjT3RjIn0.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9iY2E3MTRiMS0xYWI2LTQwZWUtYmEwMS0yZDc0NTg5NjNmMDEvIiwiaWF0IjoxNDg3NzkwOTYzLCJuYmYiOjE0ODc3OTA5NjMsImV4cCI6MTQ4Nzc5NDg2MywiYWNyIjoiMSIsImFpbyI6Ik5BIiwiYW1yIjpbInB3ZCJdLCJhcHBfZGlzcGxheW5hbWUiOiJGZXRjaCIsImFwcGlkIjoiNmU0NWFmNGItMGNjZC00NDk1LWJiZGMtM2M3ZjkyZTA1ZjgyIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJGaWVsZCIsImdpdmVuX25hbWUiOiJCaWciLCJpcGFkZHIiOiIxNjcuMjIwLjEuNzYiLCJuYW1lIjoiQmlnRmllbGQiLCJvaWQiOiI2NzJkMGU1Mi02NmNiLTRhMDItYTc5Mi00NjhmYWU5NmRhMzEiLCJwbGF0ZiI6IjMiLCJwdWlkIjoiMTAwMzAwMDA4MUFENzE2RiIsInNjcCI6IkNhbGVuZGFycy5SZWFkIENhbGVuZGFycy5SZWFkLlNoYXJlZCBDb250YWN0cy5SZWFkIE1haWxib3hTZXR0aW5ncy5SZWFkV3JpdGUgVXNlci5SZWFkIiwic3ViIjoiVWttRTJPZWFXQjlGREd3R3BuOHlrU3doVXlpcFhFMG96S1NHS2R6STZQZyIsInRpZCI6ImJjYTcxNGIxLTFhYjYtNDBlZS1iYTAxLTJkNzQ1ODk2M2YwMSIsInVuaXF1ZV9uYW1lIjoiYmlnZmllbGRAYmlnZmllbGRzLm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6ImJpZ2ZpZWxkQGJpZ2ZpZWxkcy5vbm1pY3Jvc29mdC5jb20iLCJ2ZXIiOiIxLjAifQ.JCDqOpsPT8HP6YDPyUCaoZiXgesfpzhcdKfxkgGyXNC1pIJpODuewADS6_TwZy8i0OxZHf7YkRyHPtoHZDMJOJMouD0AURtXpg6b_9qpNvaxfQlI8Kn8IBewgm2-t9-N069amyMf2PWyAmtw8FAMxsCFk5xVnVSHdzdUTgecbDnoYr8Be1dsmFcz01rt5nu3xvhE4eUja4-fl9so10YGUoIqzUyBqtO_r64E2PyXebjYhUZ9gq8NsNo6UfsmKRGXwuZ0Nyy4f187IC6XM7fwdD56DDNwZPKnYUcsVWThRZrnIEK4jRSMrFjYTOlVPjskYy-Ay1EuwGrTtkNaEkfRLw"
+                },
+                "device": {
+                    "supportedInterfaces": {
+                        "AudioPlayer": {}
+                    }
+                }
+            }
+        },
+        "request": {
+            "type": "LaunchRequest",
+            "requestId": "amzn1.echo-api.request.87dcbfce-6a08-44c2-ad29-5b2d412f62e4",
+            "timestamp": "2017-02-22T19:23:23Z",
+            "locale": "en-US"
+        }
+    },
+    "serviceResponseSucceed": {
+        "version": "1.0",
+        "response": {
+            "outputSpeech": {
+                "type": "SSML",
+                "ssml": "<speak> <s>This is Fetch</s> <s>You can ask whats on my calendar today</s> <s>To exit Fetch you can say cancel</s><s>For more examples you can Ask for help</s> </speak>"
+            },
+            "shouldEndSession": false,
+            "reprompt": {
+                "outputSpeech": {
+                    "type": "SSML",
+                    "ssml": "<speak> <s>You can ask whats on my calendar today</s> <s>To exit Fetch you can say cancel</s><s>For more examples you can Ask for help</s> </speak>"
+                }
+            }
+        },
+        "sessionAttributes": {
+            "STATE": "_fetchEventsMode"
+        }
+    }
+}

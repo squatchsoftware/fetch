@@ -1,2 +1,2 @@
 # fetch
-Alexa Skill for Office 365
+Amazon Alexa skill that links Office 365 Calendar with Alexa

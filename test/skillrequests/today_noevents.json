@@ -1,0 +1,79 @@
+{
+    "serviceRequest": {
+        "version": "1.0",
+        "session": {
+            "new": true,
+            "sessionId": "SessionId.518c656f-c405-4cbf-a35f-8ea245d7f6c9",
+            "application": {
+                "applicationId": "amzn1.ask.skill.5638ea18-075b-4ffe-9b2e-c0e40531664a"
+            },
+            "attributes": {},
+            "user": {
+                "userId": "amzn1.ask.account.AE4U2RGY6ZOW5SFYBIZQTVJJ4KANYIUAPP7TOGJBSX2BXOYK5YTAKAPYVGXCDVJPNFL3J7UE3TCABKJWWSRGDZ6DPUBPRPU3GD3Q7W6RGI67ORLQQH4CR3KX6GEZY2B7DGP5EIO5W57X363NYQRX32H6MBOEDHVPCEBKVOEHGSQVJDI5VPLMUSDEYYNMQB6L32OWRRSRM6O3CBY",
+                "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9iY2E3MTRiMS0xYWI2LTQwZWUtYmEwMS0yZDc0NTg5NjNmMDEvIiwiaWF0IjoxNDg3MzYyNDUwLCJuYmYiOjE0ODczNjI0NTAsImV4cCI6MTQ4NzM2NjM1MCwiYWNyIjoiMSIsImFtciI6WyJwd2QiXSwiYXBwX2Rpc3BsYXluYW1lIjoiZmV0Y2giLCJhcHBpZCI6IjZlNDVhZjRiLTBjY2QtNDQ5NS1iYmRjLTNjN2Y5MmUwNWY4MiIsImFwcGlkYWNyIjoiMSIsImZhbWlseV9uYW1lIjoiU3F1YXRjaCBTb2Z0d2FyZSIsImdpdmVuX25hbWUiOiJTcXVhdGNoIiwiaXBhZGRyIjoiMTAuMC4wLjEiLCJuYW1lIjoiU3F1YXRjaCBTb2Z0d2FyZSIsIm9pZCI6IjY3MmQwZTUyLTY2Y2ItNGEwMi1hNzkyLTQ2OGZhZTk2ZGEzMSIsInBsYXRmIjoiMTQiLCJwdWlkIjoiMTAwMzAwMDA4MUFENzE2RiIsInNjcCI6IkNhbGVuZGFycy5SZWFkIENhbGVuZGFycy5SZWFkLlNoYXJlZCBDb250YWN0cy5SZWFkIE1haWxib3hTZXR0aW5ncy5SZWFkV3JpdGUgVXNlci5SZWFkIiwic3ViIjoiVWttRTJPZWFXQjlGREd3R3BuOHlrU3doVXlpcFhFMG96S1NHS2R6STZQZyIsInRpZCI6ImJjYTcxNGIxLTFhYjYtNDBlZS1iYTAxLTJkNzQ1ODk2M2YwMSIsInVuaXF1ZV9uYW1lIjoic3F1YXRjaHljb2RlQHNxdWF0Y2hzb2Z0d2FyZS5jb20iLCJ1cG4iOiJzcXVhdGNoeWNvZGVAc3F1YXRjaHNvZnR3YXJlLmNvbSIsInZlciI6IjEuMCJ9.IKRVbSbdzIo8fIVl9A1EWDtpZUs892HTAblozsNlUOk"
+            }
+        },
+        "request": {
+            "type": "IntentRequest",
+            "requestId": "EdwRequestId.cec135a8-695b-4118-ae66-a0973f249090",
+            "timestamp": "2017-02-17T20:47:23Z",
+            "locale": "en-US",
+            "intent": {
+                "name": "fetchEventsIntent",
+                "slots": {
+                    "date": {
+                        "name": "date",
+                        "value": "2017-02-17"
+                    },
+                    "time": {
+                        "name": "time"
+                    }
+                }
+            },
+            "inDialog": false
+        }
+    },
+    "graphMailBoxSettingsRequest": "https://graph.microsoft.com/v1.0/me/mailboxSettings?$select=timeZone",
+    "graphMailBoxSettingsResponseError": null,
+    "graphMailBoxSettingsResponse": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('672d0e52-66cb-4a02-a792-468fae96da31')/mailboxSettings",
+        "timeZone": "Pacific Standard Time",
+        "automaticRepliesSetting": {
+            "status": "disabled",
+            "externalAudience": "all",
+            "internalReplyMessage": "",
+            "externalReplyMessage": "",
+            "scheduledStartDateTime": {
+                "dateTime": "2017-02-17T20:00:00.0000000",
+                "timeZone": "UTC"
+            },
+            "scheduledEndDateTime": {
+                "dateTime": "2017-02-18T20:00:00.0000000",
+                "timeZone": "UTC"
+            }
+        },
+        "language": {
+            "locale": "en-US",
+            "displayName": "English (United States)"
+        }
+    },
+    "graphcalendarViewRequest": "https://graph.microsoft.com/v1.0/me/calendar/calendarView?$select=start,end,subject,location,bodyPreview,isAllDay&$orderby=start/dateTime&$top=50&startDateTime=2017-02-17T08:00:00.000Z&endDateTime=2017-02-18T07:59:00.000Z",
+    "graphcalendarViewResponseError": null,
+    "graphcalendarViewResponse": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('672d0e52-66cb-4a02-a792-468fae96da31')/calendar/calendarView(start,end,subject,location,bodyPreview,isAllDay)",
+        "value": []
+    },
+    "serviceResponseSucceed": {
+        "version": "1.0",
+        "response": {
+            "outputSpeech": {
+                "type": "SSML",
+                "ssml": "<speak> <s>There are no events scheduled for today</s> </speak>"
+            },
+            "shouldEndSession": true
+        },
+        "sessionAttributes": {
+            "timeZone": "America/Tijuana"
+        }
+    }
+}

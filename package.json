@@ -1,0 +1,35 @@
+{
+    "name": "fetch",
+    "version": "0.5.0",
+    "description": "Fetch Alexa skill for getting information from Office 365",
+    "author": "Squatch Software",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/squatchsoftware/fetch.git"
+    },
+    "readme": "README.md",
+    "main": "index.js",
+    "dependencies": {
+        "body-parser": "^1.13.1",
+        "superagent": "~3.3.0",
+        "ejs": "^2.3.1",
+        "express": "^4.13.0",
+        "alexa-app": "^2.4.0",
+        "alexa-sdk": "^1.0.0",
+        "@microsoft/microsoft-graph-client": "^0.3.2",
+        "moment": "^2.17.1",
+        "moment-timezone": "^0.5.11",
+        "uuid": "^3.0.1",
+        "jwt-simple": "^0.5.1",
+        "crypto": "^0.0.3",
+        "async": "^2.1.5",
+        "jsmin": "^1.0.1"
+    },
+    "scripts": {
+        "test": "mocha"
+    },
+    "devDependencies": {
+        "mocha": "^3.2.0"
+    }
+}
