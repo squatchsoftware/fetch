@@ -24,7 +24,8 @@
         "jwt-simple": "^0.5.1",
         "crypto": "^0.0.3",
         "async": "^2.1.5",
-        "jsmin": "^1.0.1"
+        "jsmin": "^1.0.1",
+        "actions-on-google": "^1.0.0"
     },
     "scripts": {
         "test": "mocha"

@@ -16,9 +16,14 @@ var templateExtension = ".html";
 var privacyTemplateName = "privacy";
 var authorizeTemplateName = "authorize";
 
+/* google templates */
+var googlePrivacyTemplateName = "googleprivacy";
+var googleAuthorizeTemplateName = "googleauthorize";
+
+
 
 /* store templates in memory.
-Future: this is okay since only two and small. If have more or larger size consider a different method
+Future: this is okay since we have a small set of templates. If have more or larger size consider a different method
 */
 var loadedTemplates = {};
 
@@ -103,6 +108,22 @@ function GetAuthorizationTemplateProperties(event, context) {
     return props;
 }
 
+/*
+Template properties for the Google authorization template properties
+*/
+function GetGoogleAuthorizationTemplateProperties(event, context) {
+
+    var props = GetAuthorizationTemplateProperties(event, context);
+
+    // Future: The Alexa registration has these params in the authorizationUrl registered with Amazon. 
+    // Google doesn't allow query params on the authorize so we need to add  them on.
+    // Could update Alexa registration to also not have the params to be consistent.
+     var adalLoginUrl = props.adalLoginUrl + "&prompt=consent&resource=00000003-0000-0000-c000-000000000000";
+    props.adalLoginUrl = adalLoginUrl;
+
+    return props;
+}
+
 /* lambda entry point */
 exports.handler = function(event, context) {
 
@@ -111,6 +132,7 @@ exports.handler = function(event, context) {
     // Api gateway seems case-sensitive on Urls but may have to revisit if need comparison
     switch (resourcePath) {
         case '/common/oauth2/token':
+        case '/common/oauth2/googletoken':
             // Token has no web UI so call it as a lambda.
             lambdaRefreshToken.handler(event, context);
             break;
@@ -118,8 +140,15 @@ exports.handler = function(event, context) {
             var props = GetAuthorizationTemplateProperties(event, context);
             renderTemplate(event, context, authorizeTemplateName, props);
             break;
+        case '/common/oauth2/googleauthorize':
+            var props = GetGoogleAuthorizationTemplateProperties(event, context);
+            renderTemplate(event, context, googleAuthorizeTemplateName, props);
+            break;
         case '/web/privacy':
             renderTemplate(event, context, privacyTemplateName, null);
+            break;
+        case '/web/googleprivacy':
+            renderTemplate(event, context, googlePrivacyTemplateName, null);
             break;
         default:
             // Future: add a general page missing or route to a home page.

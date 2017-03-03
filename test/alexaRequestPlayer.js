@@ -5,7 +5,7 @@ var uuid = require('uuid');
 
 // Globals
 // Future: consider .config file// output directory to use for persisting Recordings.
-var skillsRequestFolder = "test/skillrequests/";
+var skillsRequestFolder = "test/alexarequests/";
 
 // mocha --debug-brk
 var logger = require('../common/logger');
@@ -18,7 +18,7 @@ exports.setSkillsRequestFolder = function setSkillsRequestFolder(folder) {
 // helper methods
 exports.runSkillRequestTestFile = function runSkillRequestTestFile(skillRequestFile, done) {
     // Load in Fetch Alexa Skill
-    var fetch = require('../fetchskill/index');
+    var fetch = require('../alexaskill/index');
 
     var originalGraphClient = fetch.getMicrosoftGraph();
 
@@ -47,7 +47,6 @@ exports.runSkillRequestTestFile = function runSkillRequestTestFile(skillRequestF
     microsoftGraphStub.addPathMapping(graphcalendarViewRequest, graphcalendarViewResponse, graphcalendarViewResponseError);
 
     // invoke the Skill
-
     var context = {
         succeed: function(response) {
 
@@ -70,8 +69,6 @@ exports.runSkillRequestTestFile = function runSkillRequestTestFile(skillRequestF
             done();
         }
     };
-
-    //  context.logger = new logger.Logger(uuid.v1());
 
     logger.attach(context);
     routeLambdaNoProxy(serviceRequest, context, fetch.handler);

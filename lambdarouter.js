@@ -4,7 +4,8 @@
 var logger = require('./common/logger');
 
 // Lambdas to route to.
-var fetchLambda = require('./fetchskill/index');
+var fetchLambda = require('./alexaskill/index');
+var fetchActionLambda = require('./googleaction/index');
 var webLambda = require('./web/index.js');
 
 /*
@@ -70,6 +71,9 @@ exports.handler = function(event, context) {
     switch (resourcePath) {
         case '/skills/fetch':
             routeLambdaNoProxy(event, context, fetchLambda.handler);
+            break;
+        case '/actions/fetch':
+            fetchActionLambda.handler(event, context);
             break;
         default:
             // default to the webLambda. 

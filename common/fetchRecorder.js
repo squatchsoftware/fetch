@@ -4,7 +4,7 @@ var fs = require('fs');
 var jwt = require("jwt-simple");
 var crypto = require('crypto');
 
-var config = require('../../common/config');
+var config = require('../common/config');
 
 // Globals
 
@@ -49,7 +49,8 @@ class FetchRecorder {
         var serviceRequest = this.recordedEvents[serviceRequestEvent];
 
         // Independent of the recording have the user be Squatch.
-        if (serviceRequest.session &&
+        if (serviceRequest &&
+            serviceRequest.session &&
             serviceRequest.session.user &&
             serviceRequest.session.user.accessToken
         ) {
@@ -70,33 +71,35 @@ class FetchRecorder {
 
         // Build a friendly name from the 
         var fileName = "recorder"; // use recorder as a default
-        var request = serviceRequest.request;
-        var intent = request.intent;
-        if (intent) {
-            if ("searchIntent" == intent.name) {
-                /*
-                request":{"type":"
-                    IntentRequest","requestId":"EdwRequestId.5d973d27-84f8-4554-b6f3-aaf6721c97df",
-                    "timestamp":"2017-02-15T08:38:04Z",
-                    "locale":"en-US",
-                    "intent":{"name":"searchIntent","slots":{"date":{"name":"date","value":"2017-02-15"},"time":{"name":"time"}}},"inDialog":false}},
-                */
-                var inDialog = request.inDialog;
-                var locale = request.locale;
+        if (serviceRequest) {
+            var request = serviceRequest.request;
+            var intent = request.intent;
+            if (intent) {
+                if ("searchIntent" == intent.name) {
+                    /*
+                    request":{"type":"
+                        IntentRequest","requestId":"EdwRequestId.5d973d27-84f8-4554-b6f3-aaf6721c97df",
+                        "timestamp":"2017-02-15T08:38:04Z",
+                        "locale":"en-US",
+                        "intent":{"name":"searchIntent","slots":{"date":{"name":"date","value":"2017-02-15"},"time":{"name":"time"}}},"inDialog":false}},
+                    */
+                    var inDialog = request.inDialog;
+                    var locale = request.locale;
 
-                var dateName = intent.slots.date.name;
-                var dateValue = intent.slots.date.value;
-                var timeName = intent.slots.time.name;
-                var timeValue = intent.slots.time.value;
+                    var dateName = intent.slots.date.name;
+                    var dateValue = intent.slots.date.value;
+                    var timeName = intent.slots.time.name;
+                    var timeValue = intent.slots.time.value;
 
-                fileName = intent.name +
-                    locale +
-                    dateValue +
-                    ((timeValue) ? timeValue : "") +
-                    ((inDialog) ? "inDialog" : "");
+                    fileName = intent.name +
+                        locale +
+                        dateValue +
+                        ((timeValue) ? timeValue : "") +
+                        ((inDialog) ? "inDialog" : "");
 
-                fileName = encodeURIComponent(fileName);
+                    fileName = encodeURIComponent(fileName);
 
+                }
             }
         }
 

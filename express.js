@@ -66,6 +66,7 @@ function callExpressUrlAsLambda(req, res) {
     var lambdaWeb = {
         'resource': req.path,
         'queryStringParameters': req.query,
+        'headers': req.headers,
         'body': body
     }
 
@@ -91,6 +92,23 @@ console.log("Listening on port " + PORT + ", try http://localhost:" + PORT + "/c
 
 
 // Can optionally run unit tests here in the Express wrapper as simple way to debug.
-var skillRequestTests = require("./test/skillRequestPlayer.js");
-skillRequestTests.setSkillsRequestFolder("./test/skillrequests/");
-// skillRequestTests.runSkillRequestTestFile("thisweekend_oneevent.json", function done() {});
+
+// Alexa skill Unit Test
+/*
+var skillRequestTests = require("./test/alexaRequestPlayer.js");
+skillRequestTests.setSkillsRequestFolder("./test/alexarequests/");
+skillRequestTests.runSkillRequestTestFile("thisweekend_oneevent.json",
+    function done() {
+
+    });
+*/
+
+// Google Action Unit Test
+/*
+var skillRequestTests = require("./test/googleRequestPlayer.js");
+skillRequestTests.setSkillsRequestFolder("./test/googlerequests/");
+skillRequestTests.runSkillRequestTestFile("googleWeekendNoEvents.json",
+    function done() {
+
+    });
+*/
