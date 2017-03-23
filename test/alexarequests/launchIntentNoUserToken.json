@@ -1,0 +1,38 @@
+{
+    "serviceRequest": {
+        "version": "1.0",
+        "session": {
+            "new": true,
+            "sessionId": "SessionId.518c656f-c405-4cbf-a35f-8ea245d7f6c9",
+            "application": {
+                "applicationId": "amzn1.ask.skill.5638ea18-075b-4ffe-9b2e-c0e40531664a"
+            },
+            "attributes": {},
+            "user": {
+                "userId": "amzn1.ask.account.AE4U2RGY6ZOW5SFYBIZQTVJJ4KANYIUAPP7TOGJBSX2BXOYK5YTAKAPYVGXCDVJPNFL3J7UE3TCABKJWWSRGDZ6DPUBPRPU3GD3Q7W6RGI67ORLQQH4CR3KX6GEZY2B7DGP5EIO5W57X363NYQRX32H6MBOEDHVPCEBKVOEHGSQVJDI5VPLMUSDEYYNMQB6L32OWRRSRM6O3CBY"
+            }
+        },
+        "request": {
+            "type": "LaunchRequest",
+            "requestId": "amzn1.echo-api.request.95b4fe84-8da5-4308-9bc7-9b249b3f8669",
+            "timestamp": "2017-03-15T13:05:24Z",
+            "locale": "en-US"
+        }
+    },
+    "serviceResponseSucceed": {
+        "version": "1.0",
+        "response": {
+            "outputSpeech": {
+                "type": "SSML",
+                "ssml": "<speak> You must have an account linked to use this skill. Please use the Alexa app to link an account. </speak>"
+            },
+            "shouldEndSession": true,
+            "card": {
+                "type": "LinkAccount"
+            }
+        },
+        "sessionAttributes": {
+            "STATE": "_fetchEventsMode"
+        }
+    }
+}

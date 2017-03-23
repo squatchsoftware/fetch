@@ -1,11 +1,15 @@
+"use strict";
+
 var Alexa = require('alexa-sdk');
 var jwt = require("jwt-simple");
 var moment = require('moment');
 
+var authHelper = require('../common/authhelper');
 var config = require('../common/config');
 var fetchRecorder = require("../common/fetchRecorder.js");
 var graph = require("../common/graph");
 var logger = require('../common/logger');
+var timezone = require('../common/timezone.js');
 
 var amazonDateTime = require("./amazonDateTime");
 
@@ -88,10 +92,21 @@ exports.handler = function(event, contextCaller, callback) {
     }
 
     if (!accessToken) {
-        context.upn = "noUserToken";
+        logger.addProperty(context, "email", "NoToken");
     } else {
+        try {
+            let decodedToken = authHelper.decodeTokenInformation(accessToken);
+
+            // update the access token to be the unwrapped token.
+            accessToken = decodedToken.access_token;
+            logger.addProperty(context, "email", decodedToken.preferred_username);
+            logger.addProperty(context, "tokenType", decodedToken.tokenType);
+            logger.addProperty(context, "endpointVersion", decodedToken.endpointVersion);
+        } catch (ex) {
+            logger.addProperty(context, "email", "Error getting token: " + ex);
+        }
+
         context.accessToken = accessToken;
-        context.upn = jwt.decode(accessToken, "", true).upn;
     }
 
     // setup serviceRequestRecorder
@@ -102,7 +117,7 @@ exports.handler = function(event, contextCaller, callback) {
     fetchRecorder.recordEvent(context, "serviceRequest", event);
 
     // setup and call the Alexa sdk handler.
-    alexaHandler = Alexa.handler(event, context);
+    let alexaHandler = Alexa.handler(event, context);
 
     // Check if appId is known before setting.
     // if appId is ngrok leave it else convert to lambda
@@ -131,7 +146,7 @@ var newSessionHandlers = {
         // Future: consolidate check with others after confirm need this for certification.
         var accessToken = this.event.session.user.accessToken;
         if (!accessToken) {
-            output = "You must have an account linked to use this skill. Please use the Alexa app to link an account.";
+            let output = "You must have an account linked to use this skill. Please use the Alexa app to link an account.";
             this.emit(":tellWithLinkAccountCard", output, output);
             return;
         }
@@ -154,7 +169,7 @@ FETCHEVENTSMODE stateHandler
 */
 var fetchEventModeHandlers = Alexa.CreateStateHandler(states.FETCHEVENTSMODE, {
     'AMAZON.YesIntent': function() {
-        output = welcomeMessage;
+        let output = welcomeMessage;
         this.emit(':ask', output, welcomeMessage);
     },
 
@@ -167,12 +182,12 @@ var fetchEventModeHandlers = Alexa.CreateStateHandler(states.FETCHEVENTSMODE, {
     },
 
     'fetchEventsIntent': function() {
-        var parent = this;
+        let parent = this;
         fetchEventsIntentHandler(this);
     },
 
     'AMAZON.HelpIntent': function() {
-        output = helpMessage;
+        let output = helpMessage;
         this.emit(':ask', output, output);
     },
 
@@ -197,7 +212,8 @@ var fetchEventModeHandlers = Alexa.CreateStateHandler(states.FETCHEVENTSMODE, {
 Handles the fetchEventsIntent
 */
 function fetchEventsIntentHandler(sessionHandler) {
-    var sessionState = sessionHandler.handler.state;
+    let sessionState = sessionHandler.handler.state;
+    let context = sessionHandler.context;
 
     // determine if existing session by if there is a handler.state. Will be null on initial request.
     var existingSession = false;
@@ -215,20 +231,34 @@ function fetchEventsIntentHandler(sessionHandler) {
     var accessToken = sessionHandler.context.accessToken;
     if (!accessToken) {
         output = "You must have an account linked to use this skill. Please use the Alexa app to link an account.";
+        logger.addProperty(context, "error", output);
         sessionHandler.emit(":tellWithLinkAccountCard", output, output);
         return;
     }
 
     // by default if don't find any messages go back to default state
     sessionHandler.handler.state = null;
-    graph.getMailBoxSettingsTimeZone(sessionHandler.context, sessionHandler.event.session.user.accessToken, function(err, timeZoneName) {
+    graph.getMailBoxSettingsTimeZone(context, accessToken, function(err, windowsTimeZone) {
         if (null != err) {
             var output = "An error occured getting Calendar timezone information. " + err.message;
+            logger.addProperty(context, "error", output);
             sessionHandler.emit(verb, output, output);
         } else {
 
+            logger.addProperty(context, "windowsTimeZone", windowsTimeZone);
+
+            var timeZoneName = timezone.mapWindowsTimeToOlson(windowsTimeZone);
+            if (!timeZoneName) {
+                var output = "unable to map windowTimeZone " + windowsTimeZone;
+                logger.addProperty(context, "error", output);
+                sessionHandler.emit(verb, output, output);;
+                return;
+            }
+
             // Store the timeZone in the session attributes. 
-            sessionHandler.attributes["timeZone"] = timeZoneName
+            sessionHandler.attributes["timeZone"] = timeZoneName;
+            logger.addProperty(context, "timeZoneName", timeZoneName);
+
 
             // Read slot data and parse out a usable date 
             var eventDate = amazonDateTime.getCalendarStartEndTimes(sessionHandler.event.request.intent.slots, timeZoneName);
@@ -237,7 +267,7 @@ function fetchEventsIntentHandler(sessionHandler) {
             if (eventDate.startDate && eventDate.endDate) {
                 graph.getCalendarEventsOutputText(
                     sessionHandler.context,
-                    sessionHandler.event.session.user.accessToken,
+                    accessToken,
                     sessionHandler.event.request.timestamp, // use the timestamp from Amazon as the current time as the user.
                     eventDate.startDate,
                     eventDate.endDate,
@@ -246,7 +276,8 @@ function fetchEventsIntentHandler(sessionHandler) {
                     function(err, outputText) {
                         // if have an error change the outputText to match.
                         if (err) {
-                            outputText = err.message;
+                            let output = err.message;
+                            logger.addProperty(context, "error", output);
                         }
 
                         sessionHandler.emit(":tell", outputText);
@@ -259,6 +290,7 @@ function fetchEventsIntentHandler(sessionHandler) {
 
 /*
 Logs the service reequest with any Personal information removed.
+Future:  consider moving any useful debugging data in the response so in one single log.
 */
 function logServiceRequest(context, event) {
     // clone the original object so can log pii scrubbed data.
@@ -266,11 +298,6 @@ function logServiceRequest(context, event) {
 
     // stub out PII info.
     if (piiScrubbed.session.user.accessToken) {
-        var accessToken = piiScrubbed.session.user.accessToken;
-        var decoded = jwt.decode(accessToken, "", true);
-        piiScrubbed.session.user.upn = decoded.upn;
-        // get debugging data from the accessToken.
-
         // Scrub out both the accessToken 
         if (piiScrub) {
             piiScrubbed.session.user.accessToken = "PII<>";
@@ -292,6 +319,7 @@ Logs the service response with any Personal information removed.
 function logServiceResponse(context, event, response) {
 
     var request;
+    let requestIntent;
     if (event) {
         requestIntent = event.request;
     } else {
@@ -322,12 +350,15 @@ function logServiceResponse(context, event, response) {
         }
     }
 
+    let properties = logger.getProperties(context);
 
     var alexaData = {
         "AlexaRequest": "",
-        "upn": context.upn,
+        "email": logger.getProperty(context, "email"),
+
         "intent": requestIntent,
-        "responseData": piiScrubbedResponse
+        "responseData": piiScrubbedResponse,
+        "properties": properties
     }
 
     logger.log(context, JSON.stringify(alexaData));

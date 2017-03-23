@@ -11,7 +11,7 @@ var webLambda = require('./web/index.js');
 /*
 All Lambda's we get from Gateway have proxy information.
 Need to remove the proxy information before passing to the Alexa skill
-lambda and then conver the response back to http
+lambda and then convert the response back to http
 */
 function routeLambdaNoProxy(event, context, lambda) {
 

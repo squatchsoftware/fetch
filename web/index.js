@@ -8,8 +8,13 @@ The request comes in from Amazaon Gateway services with lambda proxy integration
 
 var fs = require('fs');
 var ejs = require('ejs');
-var lambdaRefreshToken = require('./lambdaRefreshToken');
+var superagent = require("superagent");
+// var lambdaRefreshToken = require('./lambdaRefreshToken');
+
+var base64 = require('../common/base64');
+var config = require('../common/config');
 var logger = require('../common/logger');
+var authHelper = require('../common/authhelper');
 
 /* template data */
 var templateExtension = ".html";
@@ -19,8 +24,7 @@ var authorizeTemplateName = "authorize";
 /* google templates */
 var googlePrivacyTemplateName = "googleprivacy";
 var googleAuthorizeTemplateName = "googleauthorize";
-
-
+var googleAuthorizeV2TemplateName = "googleauthorizev2";
 
 /* store templates in memory.
 Future: this is okay since we have a small set of templates. If have more or larger size consider a different method
@@ -63,6 +67,106 @@ function renderTemplate(event, context, templateName, properties) {
 }
 
 /*
+Helper to convert flat json data to form urlencoding 
+suitable for queryParams or in a Form encoded body */
+function htmlFormEncode(data) {
+    var encoded = '';
+    for (var key in data) {
+        if (encoded.length > 1) {
+            encoded += "&"
+        }
+
+        encoded += encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+    }
+
+    return encoded;
+}
+
+/*
+Helper to convert encoded form and url encodings back to json
+*/
+function htmlFormDecode(data) {
+
+    var decoded = {};
+
+    var items = data.split("&");
+    for (var i in items) {
+        var item = items[i];
+        var nameValue = item.split("=");
+
+        decoded[nameValue[0]] = nameValue[1] ? decodeURIComponent(nameValue[1]) : null;
+    }
+
+    return decoded;
+}
+
+/*
+Builds a RequestInfo object from the lambda event
+Currently only used to build the ServerPath but could be expanded and get its own class.
+*/
+function GetRequestInformation(event) {
+    var requestInfo = {
+        protocol: event.headers["X-Forwarded-Proto"], // https:, http:
+        host: event.headers["Host"],
+        port: event.headers["X-Forwarded-Port"],
+        stage: (event.requestContext) ? event.requestContext.stage : null,
+        path: event.path,
+        queryParams: event.queryStringParameters,
+
+        GetServerPath: function() {
+
+            // builds the path to the server Url.
+            var serverPath = this.protocol + "://" + this.host;
+            if (this.port) {
+                serverPath += ":" + this.port;
+            }
+            serverPath += "/";
+
+            // if have a stage add that on as well.
+            if (this.stage) {
+                serverPath += this.stage + "/";
+            }
+
+            return serverPath;
+        }
+    }
+
+    return requestInfo
+}
+
+/* 
+Forward a request for a refresh token onto the OAuth endpoint
+*/
+function forwardRefreshToken(event, context, tokenEndpoint, encodeIdToken) {
+
+    superagent
+        .post(tokenEndpoint)
+        .query(event.queryStringParameters)
+        .type('form')
+        .send(event.body) // 
+        .end(function(error, response) {
+            if (error) {
+                logger.log(context, "!!Error: getting refresh token. " + JSON.stringify(error));
+            } else {
+                //  logger.log(context, "Success getting refresh token");
+            }
+
+            response.body.access_token = authHelper.encodeTokenInformation(
+                (encodeIdToken) ? response.body.id_token : null,
+                response.body.access_token);
+
+            let httpResponse = {
+                statusCode: response.statusCode,
+                body: JSON.stringify(response.body),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            context.succeed(httpResponse);
+        });
+};
+/*
 Helper method to send the given text as an httpResponse
 */
 function sendTextResponse(context, responseBody) {
@@ -78,51 +182,65 @@ function sendTextResponse(context, responseBody) {
 }
 
 /*
+Helper method to send a redirect.
+*/
+function sendRedirctResponse(context, locationUrl) {
+    var httpResponse = {
+        statusCode: '302',
+        headers: {
+            'Content-Type': 'text/html; charset=UTF-8',
+            "Location": locationUrl
+        }
+    };
+
+    context.succeed(httpResponse);
+}
+
+
+/*
 Build the array of properties to  use when rendering the authorization template
 */
 function GetAuthorizationTemplateProperties(event, context) {
+
+    var requestInfo = GetRequestInformation(event);
     var authorizeQuery = event.queryStringParameters;
 
-    // encode the authorize query. same code as form encoding 
-    // there must be a helper library already to convier query params to string
-    var encoded = '';
-    for (var key in authorizeQuery) {
-        if (encoded.length > 1) {
-            encoded += "&"
-        }
-
-        encoded += encodeURIComponent(key) + '=' + encodeURIComponent(authorizeQuery[key]);
-    }
+    // Google doesn't allow query params on the authorize so we need to add them on.
+    // Future: could remove from Alexa registration to also not have the params to be consistent.
+    authorizeQuery["resource"] = "00000003-0000-0000-c000-000000000000";
+    authorizeQuery["prompt"] = "consent";
 
     // Build the adal Url.
-    var adalLoginUrl = "https://login.windows.net/common/oauth2/authorize" + '?' + encoded;
-
+    var adalLoginUrl = "https://login.windows.net/common/oauth2/authorize" + '?' + htmlFormEncode(authorizeQuery);
 
     // set the template properties
     var props = {
-        'schema': 'schemavalue',
-        'utterances': 'utter datmud',
         'adalLoginUrl': adalLoginUrl
     };
 
     return props;
 }
 
+
 /*
-Template properties for the Google authorization template properties
+Build the array of properties to  use when rendering the authorization template
 */
-function GetGoogleAuthorizationTemplateProperties(event, context) {
+function GetV20AuthorizationTemplateProperties(event, context) {
 
-    var props = GetAuthorizationTemplateProperties(event, context);
+    var requestInfo = GetRequestInformation(event);
+    var authorizeQuery = event.queryStringParameters;
 
-    // Future: The Alexa registration has these params in the authorizationUrl registered with Amazon. 
-    // Google doesn't allow query params on the authorize so we need to add  them on.
-    // Could update Alexa registration to also not have the params to be consistent.
-     var adalLoginUrl = props.adalLoginUrl + "&prompt=consent&resource=00000003-0000-0000-c000-000000000000";
-    props.adalLoginUrl = adalLoginUrl;
+    // Build the adal Url.
+    var adalLoginUrl = "https://login.windows.net/common/oauth2/v2.0/authorize" + '?' + htmlFormEncode(authorizeQuery);
+
+    // set the template properties
+    var props = {
+        'adalLoginUrl': adalLoginUrl
+    };
 
     return props;
 }
+
 
 /* lambda entry point */
 exports.handler = function(event, context) {
@@ -133,16 +251,24 @@ exports.handler = function(event, context) {
     switch (resourcePath) {
         case '/common/oauth2/token':
         case '/common/oauth2/googletoken':
-            // Token has no web UI so call it as a lambda.
-            lambdaRefreshToken.handler(event, context);
+            // v1.0 endpoint only returns idToken on an Authorization code so for consistenty on 
+            // Authcode and refresh token don't encode any idToken.
+            forwardRefreshToken(event, context, "https://login.windows.net/common/oauth2/token", false /* encodeIdToken */ );
+            break;
+        case '/common/oauth2/v2.0/googletoken':
+            forwardRefreshToken(event, context, "https://login.windows.net/common/oauth2/v2.0/token", true /* encodeIdToken */ );
             break;
         case '/common/oauth2/authorize':
             var props = GetAuthorizationTemplateProperties(event, context);
             renderTemplate(event, context, authorizeTemplateName, props);
             break;
         case '/common/oauth2/googleauthorize':
-            var props = GetGoogleAuthorizationTemplateProperties(event, context);
+            var props = GetAuthorizationTemplateProperties(event, context);
             renderTemplate(event, context, googleAuthorizeTemplateName, props);
+            break;
+        case "/common/oauth2/v2.0/googleauthorize":
+            var props = GetV20AuthorizationTemplateProperties(event, context);
+            renderTemplate(event, context, googleAuthorizeV2TemplateName, props);
             break;
         case '/web/privacy':
             renderTemplate(event, context, privacyTemplateName, null);

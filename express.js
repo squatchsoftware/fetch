@@ -23,7 +23,10 @@ function callExpressUrlAsLambda(req, res) {
         succeed: function(response) {
             // map the response to express
             res.statusCode = response.statusCode;
-            res.header = response.header;
+
+            for (var headerName in response.headers) {
+                res.append(headerName, response.headers[headerName]);
+            }
             res.end(response.body);
         },
         fail: function(response) {
@@ -63,14 +66,28 @@ function callExpressUrlAsLambda(req, res) {
         params = '';
     }
 
-    var lambdaWeb = {
-        'resource': req.path,
-        'queryStringParameters': req.query,
-        'headers': req.headers,
-        'body': body
+    // Map subset of Express headers to Lambda format.
+    var headers = {
+        "X-Forwarded-Proto": req.headers["x-forwarded-proto"],
+        "Host": req.headers["x-original-host"]
+    };
+
+    // setup the event data to send the subset we need that amazon sends.
+    var event = {
+        resource: req.path,
+        path: req.path,
+        queryStringParameters: req.query,
+        headers: headers,
+        body: body,
+
+        requestContext: {
+            // Future: consider if want /stage/ in the express path and then rework to match AI Gateway that
+            // the first url segment is the stage and the resource and path are the rest of the Url.
+            // stage: "fetch" 
+        }
     }
 
-    lambdarouter.handler(lambdaWeb, context);
+    lambdarouter.handler(event, context);
 }
 
 /*
@@ -94,21 +111,20 @@ console.log("Listening on port " + PORT + ", try http://localhost:" + PORT + "/c
 // Can optionally run unit tests here in the Express wrapper as simple way to debug.
 
 // Alexa skill Unit Test
-/*
+
 var skillRequestTests = require("./test/alexaRequestPlayer.js");
 skillRequestTests.setSkillsRequestFolder("./test/alexarequests/");
 skillRequestTests.runSkillRequestTestFile("thisweekend_oneevent.json",
     function done() {
 
     });
-*/
+
 
 // Google Action Unit Test
-/*
+
 var skillRequestTests = require("./test/googleRequestPlayer.js");
 skillRequestTests.setSkillsRequestFolder("./test/googlerequests/");
 skillRequestTests.runSkillRequestTestFile("googleWeekendNoEvents.json",
     function done() {
 
     });
-*/

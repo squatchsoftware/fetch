@@ -2,12 +2,14 @@
 var assert = require('assert');
 var fs = require('fs');
 var uuid = require('uuid');
+var jwt = require("jwt-simple");
 
 // Globals
 // Future: consider .config file// output directory to use for persisting Recordings.
 var skillsRequestFolder = "test/googlerequests/";
 
 // mocha --debug-brk
+var authHelper = require('../common/authhelper');
 var logger = require('../common/logger');
 
 // Let caller override the folder to look for the Skills request file.
@@ -41,6 +43,34 @@ exports.runSkillRequestTestFile = function runSkillRequestTestFile(skillRequestF
     var expectedServiceResponseSucceed = testCase.googleActionResponse;
     var expectedServiceResponseFail = null; // currently just a response.
 
+    // Test files contain the access token that the authProvider created.
+    // Wrap here for testing encoding/decoding.
+    // Future: Consider putting tokens in test files if also switch over Alexa
+    // to AuthV2.0 or have an unit test helper to create a token to use.
+    var body = JSON.parse(googleActionEvent.body);
+    var access_Token = body.originalRequest.data.user.access_token;
+
+    // make up an identity accessToken
+    let issuedTime = Date.now() / 1000;
+    let identityInfo = {
+        iat: issuedTime,
+        exp: issuedTime + 3600,
+        name: "Squatch Software",
+        preferred_username: "squatchsoftware@outlook.com",
+        ver: "2.0",
+        tid: "9188040d-6c67-4c5b-b112-36a304b66dad"
+    };
+
+    let identity_token = jwt.encode(identityInfo, "testSigningKey");
+
+    let encodedToken = authHelper.encodeTokenInformation(identity_token, access_Token);
+    let decodedToken = authHelper.decodeTokenInformation(encodedToken); // make sure can decode.
+
+    // make the new token the access_token in the google request.
+    body.originalRequest.data.user.access_token = encodedToken;
+    googleActionEvent.body = JSON.stringify(body);
+
+    // JSON.stringify(decoded)) let decodedToken = authHelper.decodeTokenInformation(accessToken);
     // Setup the Graph calls and response.
     microsoftGraphStub.clearPathMappings();
     microsoftGraphStub.addPathMapping(graphMailBoxSettingsRequest, graphMailBoxSettingsResponse, graphMailBoxSettingsResponseError);

@@ -1,0 +1,42 @@
+{
+    "serviceRequest": {
+        "version": "1.0",
+        "session": {
+            "new": true,
+            "sessionId": "SessionId.518c656f-c405-4cbf-a35f-8ea245d7f6c9",
+            "application": {
+                "applicationId": "amzn1.ask.skill.5638ea18-075b-4ffe-9b2e-c0e40531664a"
+            },
+            "attributes": {},
+            "user": {
+                "userId": "amzn1.ask.account.AE4U2RGY6ZOW5SFYBIZQTVJJ4KANYIUAPP7TOGJBSX2BXOYK5YTAKAPYVGXCDVJPNFL3J7UE3TCABKJWWSRGDZ6DPUBPRPU3GD3Q7W6RGI67ORLQQH4CR3KX6GEZY2B7DGP5EIO5W57X363NYQRX32H6MBOEDHVPCEBKVOEHGSQVJDI5VPLMUSDEYYNMQB6L32OWRRSRM6O3CBY",
+                "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9iY2E3MTRiMS0xYWI2LTQwZWUtYmEwMS0yZDc0NTg5NjNmMDEvIiwiaWF0IjoxNDg3MzYyNDUwLCJuYmYiOjE0ODczNjI0NTAsImV4cCI6MTQ4NzM2NjM1MCwiYWNyIjoiMSIsImFtciI6WyJwd2QiXSwiYXBwX2Rpc3BsYXluYW1lIjoiZmV0Y2giLCJhcHBpZCI6IjZlNDVhZjRiLTBjY2QtNDQ5NS1iYmRjLTNjN2Y5MmUwNWY4MiIsImFwcGlkYWNyIjoiMSIsImZhbWlseV9uYW1lIjoiU3F1YXRjaCBTb2Z0d2FyZSIsImdpdmVuX25hbWUiOiJTcXVhdGNoIiwiaXBhZGRyIjoiMTAuMC4wLjEiLCJuYW1lIjoiU3F1YXRjaCBTb2Z0d2FyZSIsIm9pZCI6IjY3MmQwZTUyLTY2Y2ItNGEwMi1hNzkyLTQ2OGZhZTk2ZGEzMSIsInBsYXRmIjoiMTQiLCJwdWlkIjoiMTAwMzAwMDA4MUFENzE2RiIsInNjcCI6IkNhbGVuZGFycy5SZWFkIENhbGVuZGFycy5SZWFkLlNoYXJlZCBDb250YWN0cy5SZWFkIE1haWxib3hTZXR0aW5ncy5SZWFkV3JpdGUgVXNlci5SZWFkIiwic3ViIjoiVWttRTJPZWFXQjlGREd3R3BuOHlrU3doVXlpcFhFMG96S1NHS2R6STZQZyIsInRpZCI6ImJjYTcxNGIxLTFhYjYtNDBlZS1iYTAxLTJkNzQ1ODk2M2YwMSIsInVuaXF1ZV9uYW1lIjoic3F1YXRjaHljb2RlQHNxdWF0Y2hzb2Z0d2FyZS5jb20iLCJ1cG4iOiJzcXVhdGNoeWNvZGVAc3F1YXRjaHNvZnR3YXJlLmNvbSIsInZlciI6IjEuMCJ9.IKRVbSbdzIo8fIVl9A1EWDtpZUs892HTAblozsNlUOk"
+            }
+        },
+        "request": {
+            "type": "LaunchRequest",
+            "requestId": "amzn1.echo-api.request.95b4fe84-8da5-4308-9bc7-9b249b3f8669",
+            "timestamp": "2017-03-15T13:05:24Z",
+            "locale": "en-US"
+        }
+    },
+    "serviceResponseSucceed": {
+        "version": "1.0",
+        "response": {
+            "outputSpeech": {
+                "type": "SSML",
+                "ssml": "<speak> <s>This is Fetch</s> <s>You can ask whats on my calendar today</s> <s>To exit Fetch you can say cancel</s><s>For more examples you can Ask for help</s> </speak>"
+            },
+            "shouldEndSession": false,
+            "reprompt": {
+                "outputSpeech": {
+                    "type": "SSML",
+                    "ssml": "<speak> <s>You can ask whats on my calendar today</s> <s>To exit Fetch you can say cancel</s><s>For more examples you can Ask for help</s> </speak>"
+                }
+            }
+        },
+        "sessionAttributes": {
+            "STATE": "_fetchEventsMode"
+        }
+    }
+}

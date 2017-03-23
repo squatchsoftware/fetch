@@ -74,19 +74,11 @@ exports.getMailBoxSettingsTimeZone = function getMailBoxSettingsTimeZone(context
         fetchRecorder.recordEvent(context, "graphMailBoxSettingsResponse", res);
 
         if (err) {
-
             callback(err, null);
         } else {
-            // Graph returns the time zone with windows names such as 'Pacific Standard Time'.
-            // This needs to be converted to be used in node.
             var windowsTimeZone = res.timeZone;
-            var timeZone = timezone.mapWindowsTimeToOlson(windowsTimeZone);
+            callback(null, windowsTimeZone);
 
-            if (!timeZone) {
-                callback("unable to map windowTimeZone " + windowsTimeZone);
-            } else {
-                callback(null, timeZone);
-            }
         }
     })
 };
@@ -108,7 +100,8 @@ exports.getCalendarEventsOutputText = function getCalendarEventsOutputText(
 
     getCalendarView(context, startDate, endDate, timeZoneName, accessToken, function(err, data) {
         if (null != err) {
-            callback(null, "<s>An error occured getting your calendar information</s>" + err.message);
+            err.message = "<s>An error occured getting your calendar information</s>" + err.message;
+            callback(err, null);
             return;
         }
 

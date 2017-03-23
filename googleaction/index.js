@@ -11,10 +11,13 @@ var ApiAssistant = googleActions.ApiAiAssistant;
 var moment = require('moment');
 var jwt = require("jwt-simple");
 
+var authHelper = require('../common/authhelper');
 var logger = require('../common/logger');
 var config = require('../common/config');
 var fetchRecorder = require("../common/fetchRecorder.js");
 var graph = require("../common/graph");
+var timezone = require('../common/timezone.js');
+
 
 /*
 setMicrosoftGraph allows caller to overide default MicrosoftGraph package.
@@ -58,30 +61,52 @@ function responseHandlerGetEvents(context, assistant) {
 
     // if no access token then tell the user about linking.
     if (!accessToken) {
-        context.upn = "NoToken";
+        logger.addProperty(context, "email", "NoToken");
         assistant.tell("Account linking is not setup for Fetch.");
         return;
     }
 
-    // if have a token decode it and addd the upn to the context.
-    var decoded = jwt.decode(accessToken, "", true);
-    context.upn = decoded.upn;
+    try {
+        let decodedToken = authHelper.decodeTokenInformation(accessToken);
+
+        // update the access token to be the unwrapped token.
+        accessToken = decodedToken.access_token;
+
+        logger.addProperty(context, "email", decodedToken.preferred_username);
+        logger.addProperty(context, "tokenType", decodedToken.tokenType);
+        logger.addProperty(context, "endpointVersion", decodedToken.endpointVersion);
+    } catch (ex) {
+        logger.addProperty(context, "email", "Error getting token: " + ex);
+    }
 
     // Get the mailbox settings for the time timezone.
     // Future: see if way to get this directly from Google instead.
-    graph.getMailBoxSettingsTimeZone(context, accessToken, function(err, timeZoneName) {
+    graph.getMailBoxSettingsTimeZone(context, accessToken, function(err, windowsTimeZone) {
         if (null != err) {
             var output = "An error occured getting Calendar timezone information. " + err.message;
+            logger.addProperty(context, "error", output);
             assistant.tell(output);
             return;
         } else {
+            logger.addProperty(context, "windowsTimeZone", windowsTimeZone);
+            var timeZoneName = timezone.mapWindowsTimeToOlson(windowsTimeZone);
+            if (!timeZoneName) {
+                var output = "unable to map windowTimeZone " + windowsTimeZone;
+                logger.addProperty(context, "error", output);
+                assistant.tell(output);
+                return;
+            }
+
+            logger.addProperty(context, "timeZoneName", timeZoneName);
 
             // Use the Timestamp sent in the body as the currentUserTime. 
             var currentUserTime = moment.tz(body.timestamp, timeZoneName);
 
             // get the dateTime.
             var dateTime = assistant.getArgument("dateTime"); // time for the calendar request.
-            context.intentData = dateTime; // store the dateTime as the intentData for the request for logging.
+
+            // Save the intentData for logging
+            logger.addProperty(context, "intentData", dateTime);
 
             // Parse the dateTime into a time range and normalize as UTC
             // Either a single value or if spans date then of form "2017-03-04/2017-03-05"
@@ -122,6 +147,7 @@ function responseHandlerGetEvents(context, assistant) {
                         // if have an error change the outputText to match.
                         if (err) {
                             outputText = err.message;
+                            logger.addProperty(context, "error", outputText);
                         }
 
                         assistant.tell("<speak> " + outputText + " </speak>");
@@ -199,13 +225,15 @@ exports.handler = function(event, context) {
             fetchRecorder.recordEvent(googleActioncontext, "googleActionResponse", httpResponse);
             fetchRecorder.persistRecording(googleActioncontext);
 
-            // Log out information about the request.
+            var propertyBag = logger.getProperties(googleActioncontext);
 
+            // Log out information about the request.
             var googleData = {
                 "GoogleRequest": "",
-                "upn": googleActioncontext.upn,
-                "intentData": googleActioncontext.intentData,
-                "statusCode": this.statusCode
+                "email": logger.getProperty(googleActioncontext, "email"),
+                "statusCode": this.statusCode,
+
+                "properties": propertyBag
             }
 
             logger.log(googleActioncontext, JSON.stringify(googleData))

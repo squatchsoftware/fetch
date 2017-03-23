@@ -20,5 +20,11 @@
 
     /* fetchRecorder settings */
     "enableFetchRecorder": false, // Set enableFetchRecorder to true for recording to be enabled.
-    "recorderOutputDirectory": "./test/skillrequests/"
+    "recorderOutputDirectory": "./test/skillrequests/",
+
+    /* Authentication keys for authhelper.js  
+        Before using authHelper need to specify these keys in the config.user.json file.
+    */
+    "authhelper_tokenSigningKey": "",
+    "authhelper_tokenIssuer": ""
 }
