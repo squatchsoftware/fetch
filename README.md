@@ -1,5 +1,5 @@
 # Fetch
-Fetch connects your Office 365 calendar events to Alexa and Google Home.
+Fetch connects your Outlook and Office 365 calendar events to Alexa and Google Home.
 
 Fetch is deployed as an Amazon Lambda function and connects to Office data through the Microsoft Graph.
 
