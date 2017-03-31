@@ -114,7 +114,7 @@ console.log("Listening on port " + PORT + ", try http://localhost:" + PORT + "/c
 
 var skillRequestTests = require("./test/alexaRequestPlayer.js");
 skillRequestTests.setSkillsRequestFolder("./test/alexarequests/");
-skillRequestTests.runSkillRequestTestFile("thisweekend_oneevent.json",
+skillRequestTests.runSkillRequestTestFile("today_noevents.json",
     function done() {
 
     });

@@ -1,6 +1,7 @@
 "use strict";
 var assert = require('assert');
 var fs = require('fs');
+var jwt = require("jwt-simple");
 var uuid = require('uuid');
 
 // Globals
@@ -8,6 +9,7 @@ var uuid = require('uuid');
 var skillsRequestFolder = "test/alexarequests/";
 
 // mocha --debug-brk
+var authHelper = require('../common/authhelper');
 var logger = require('../common/logger');
 
 // Let caller override the folder to look for the Skills request file.
@@ -71,6 +73,28 @@ exports.runSkillRequestTestFile = function runSkillRequestTestFile(skillRequestF
     };
 
     logger.attach(context);
+
+    // Wrap authToken stored in the script file with the fetch token.
+    // Future: combine with Google play handling if switch to v2.0 endpoint for Alexa.
+    if (serviceRequest.session.user
+            && serviceRequest.session.user.accessToken)
+    {
+        let access_Token = serviceRequest.session.user.accessToken;
+
+        // Need to update the expiration time.
+        let decoded = jwt.decode(access_Token, "", true);
+        let issuedTime = Date.now() / 1000;
+        decoded.iat =  issuedTime;
+        decoded.exp =  issuedTime + 3600;
+        access_Token = jwt.encode(decoded, "testSigningKey");
+
+        let encodedToken = authHelper.encodeTokenInformation(context,null /* identity_token */, access_Token);
+        let decodedToken = authHelper.decodeTokenInformation(encodedToken); // make sure can decode.
+
+        serviceRequest.session.user.accessToken = encodedToken;
+    }
+
+
     routeLambdaNoProxy(serviceRequest, context, fetch.handler);
 }
 

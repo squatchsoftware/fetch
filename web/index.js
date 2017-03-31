@@ -137,7 +137,7 @@ function GetRequestInformation(event) {
 /* 
 Forward a request for a refresh token onto the OAuth endpoint
 */
-function forwardRefreshToken(event, context, tokenEndpoint, encodeIdToken) {
+function forwardRefreshToken(event, context, tokenEndpoint, encodeIdToken, fallbackUrl) {
 
     superagent
         .post(tokenEndpoint)
@@ -146,14 +146,31 @@ function forwardRefreshToken(event, context, tokenEndpoint, encodeIdToken) {
         .send(event.body) // 
         .end(function(error, response) {
             if (error) {
-                logger.log(context, "!!Error: getting refresh token. " + JSON.stringify(error));
-            } else {
-                //  logger.log(context, "Success getting refresh token");
-            }
+                if (401 == error.status && fallbackUrl) {
+                    // if have a fallbackUrl call forward again 
+                    // Use fallback when may have new token refresh url was called but
+                    // refresh token was created originally on the fallbackUrl
+                    // until all of the refresh_tokens on the fallbackUrl have expired.
+                    let bodyJson = htmlFormDecode(event.body);
+                    logger.log(context, "!!Error: getting refresh token.  will try fallback " + JSON.stringify(error));
 
-            response.body.access_token = authHelper.encodeTokenInformation(
-                (encodeIdToken) ? response.body.id_token : null,
-                response.body.access_token);
+                    // Fixup to v1.0 endpoint
+                    bodyJson["client_id"] = config.settings("authv10_client_id");
+                    bodyJson["client_secret"] = config.settings("authv10_client_secret");
+                    event.body = htmlFormEncode(bodyJson);
+
+                    forwardRefreshToken(event, context, fallbackUrl, encodeIdToken);
+                    return;
+                } else {
+                    logger.log(context, "!!Error: getting refresh token. " + JSON.stringify(error));
+                }
+            } else {
+                // Encode the access token.
+                response.body.access_token = authHelper.encodeTokenInformation(
+                    context,
+                    (encodeIdToken) ? response.body.id_token : null,
+                    response.body.access_token);
+            }
 
             let httpResponse = {
                 statusCode: response.statusCode,
@@ -256,7 +273,8 @@ exports.handler = function(event, context) {
             forwardRefreshToken(event, context, "https://login.windows.net/common/oauth2/token", false /* encodeIdToken */ );
             break;
         case '/common/oauth2/v2.0/googletoken':
-            forwardRefreshToken(event, context, "https://login.windows.net/common/oauth2/v2.0/token", true /* encodeIdToken */ );
+            forwardRefreshToken(event, context, "https://login.windows.net/common/oauth2/v2.0/token", true /* encodeIdToken */ ,
+                "https://login.windows.net/common/oauth2/token");
             break;
         case '/common/oauth2/authorize':
             var props = GetAuthorizationTemplateProperties(event, context);

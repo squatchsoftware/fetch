@@ -241,7 +241,8 @@ function fetchEventsIntentHandler(sessionHandler) {
     graph.getMailBoxSettingsTimeZone(context, accessToken, function(err, windowsTimeZone) {
         if (null != err) {
             var output = "An error occured getting Calendar timezone information. " + err.message;
-            logger.addProperty(context, "error", output);
+            logger.addProperty(context, "errorMessage", output);
+            logger.addProperty(context, "errorDetails", err);
             sessionHandler.emit(verb, output, output);
         } else {
 
@@ -276,8 +277,9 @@ function fetchEventsIntentHandler(sessionHandler) {
                     function(err, outputText) {
                         // if have an error change the outputText to match.
                         if (err) {
-                            let output = err.message;
-                            logger.addProperty(context, "error", output);
+                            outputText = err.message;
+                            logger.addProperty(context, "errorMessage", outputText);
+                            logger.addProperty(context, "errorDetails", err);
                         }
 
                         sessionHandler.emit(":tell", outputText);

@@ -49,14 +49,9 @@ function responseHandlerGetEvents(context, assistant) {
         body.originalRequest.data &&
         body.originalRequest.data.user) ? body.originalRequest.data.user : null;
 
-    // See if can get the Access token.
-    var accessToken
+    let accessToken;
     if (userInfo) {
         accessToken = userInfo.access_token;
-    } else {
-        // If no accessToken check the Config file if there is one to use.
-        // This is convenient in some test scenarios.
-        accessToken = config.settings("googleToken");
     }
 
     // if no access token then tell the user about linking.
@@ -81,10 +76,12 @@ function responseHandlerGetEvents(context, assistant) {
 
     // Get the mailbox settings for the time timezone.
     // Future: see if way to get this directly from Google instead.
+    logger.log(context, "Getting mailbox settings.");
     graph.getMailBoxSettingsTimeZone(context, accessToken, function(err, windowsTimeZone) {
         if (null != err) {
             var output = "An error occured getting Calendar timezone information. " + err.message;
-            logger.addProperty(context, "error", output);
+            logger.addProperty(context, "errorMessage", output);
+            logger.addProperty(context, "errorDetails", err);
             assistant.tell(output);
             return;
         } else {
@@ -135,6 +132,8 @@ function responseHandlerGetEvents(context, assistant) {
 
             // Check we have both a start and end date
             if (startDateText && endDateText) {
+                logger.log(context, "Getting calendar data from Graph.");
+
                 graph.getCalendarEventsOutputText(
                     context,
                     accessToken,
@@ -147,7 +146,8 @@ function responseHandlerGetEvents(context, assistant) {
                         // if have an error change the outputText to match.
                         if (err) {
                             outputText = err.message;
-                            logger.addProperty(context, "error", outputText);
+                            logger.addProperty(context, "errorMessage", outputText);
+                            logger.addProperty(context, "errorDetails", err);
                         }
 
                         assistant.tell("<speak> " + outputText + " </speak>");
