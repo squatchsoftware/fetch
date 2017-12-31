@@ -200,7 +200,7 @@ var fetchEventModeHandlers = Alexa.CreateStateHandler(states.FETCHEVENTSMODE, {
     },
 
     'SessionEndedRequest': function() {
-        this.emit('AMAZON.StopIntent');
+        this.emit(':tell', killSkillMessage);;
     },
 
     'Unhandled': function() {

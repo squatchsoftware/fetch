@@ -3,6 +3,7 @@ var assert = require('assert');
 var fs = require('fs');
 var uuid = require('uuid');
 var jwt = require("jwt-simple");
+var jsonCompare = require('json-compare')
 
 // Globals
 // Future: consider .config file// output directory to use for persisting Recordings.
@@ -52,15 +53,49 @@ exports.runSkillRequestTestFile = function runSkillRequestTestFile(skillRequestF
     var context = {
         succeed: function(response) {
 
-            var expectedOutputString = JSON.stringify(expectedServiceResponseSucceed);
-            var reponseString = JSON.stringify(response);
+            var matchingJson = true;
 
-            if (expectedOutputString != reponseString) {
-                console.log(expectedOutputString);
-                console.log(reponseString);
+            // The response is a webResponse with a JSON string the body. 
+            if (true == matchingJson
+                 && response.statusCode != expectedServiceResponseSucceed.statusCode)
+            {
+                matchingJson = false;
+            }
+            
+            // The response should contain "body", "headers", "statusCode"
+            if (true == matchingJson)
+            {
+                var compareHeaders = jsonCompare(expectedServiceResponseSucceed.headers, response.headers);
+                if (!compareHeaders.isMatch)
+                {
+                    matchingJson = false;
+                }
             }
 
-            assert.equal(reponseString, expectedOutputString);
+            if (true == matchingJson)
+            {
+                var expectedBodyJson = JSON.parse(expectedServiceResponseSucceed.body);
+                var responseBodyJson = JSON.parse(response.body);
+
+                var compareBodyResults = jsonCompare(expectedBodyJson, responseBodyJson);
+                if (!compareBodyResults.isMatch)
+                {
+                    matchingJson = false;
+                }
+            }
+
+             if (!matchingJson)
+            {
+                var expectedOutputString = JSON.stringify(expectedServiceResponseSucceed);
+                var reponseString = JSON.stringify(response);
+
+                // log out the strings.
+                console.log(expectedOutputString);
+                console.log(reponseString);
+
+                // assert to fail the test
+                assert.equal(reponseString, expectedOutputString);
+            }
 
             fetch.setMicrosoftGraph(originalGraphClient); // Set back the graph client.
             done();

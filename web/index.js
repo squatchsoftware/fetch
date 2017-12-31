@@ -26,6 +26,10 @@ var googlePrivacyTemplateName = "googleprivacy";
 var googleAuthorizeTemplateName = "googleauthorize";
 var googleAuthorizeV2TemplateName = "googleauthorizev2";
 
+/* wordOfTheWeekTemplates*/
+var wordOfTheWeektemplatefolder = "./wordoftheweek/web/views/";
+var wordOfTheWeekPrivacyTemplateName = "privacy";
+
 /* store templates in memory.
 Future: this is okay since we have a small set of templates. If have more or larger size consider a different method
 */
@@ -35,12 +39,17 @@ var loadedTemplates = {};
 Get the template for the templateName.
 if the template doesn't exist null is returned
 */
-function getTemplate(templateName) {
+function getTemplate(templateName, templateFolder) {
     var templateData = loadedTemplates[templateName];
     if (!templateData) {
         // file on disk should be in the /views folder with the name matching
         // the template.
-        var templateFilePath = "./web/views/" + templateName + templateExtension;
+        if (!templateFolder) {
+            templateFolder = "./web/views/";
+        }
+
+        var templateFilePath = templateFolder + templateName + templateExtension;
+
         templateData = fs.readFileSync(templateFilePath, 'utf-8');
         loadedTemplates[templateName] = templateData;
     }
@@ -51,8 +60,8 @@ function getTemplate(templateName) {
 /* 
 Renders the template with the given properties
 */
-function renderTemplate(event, context, templateName, properties) {
-    var webPageString = getTemplate(templateName);
+function renderTemplate(event, context, templateName, properties, templateFolder) {
+    var webPageString = getTemplate(templateName, templateFolder);
     if (null == webPageString) {
         webPageString = templateName + " is unavailable";
         logger.log(webPageString);
@@ -137,7 +146,7 @@ function GetRequestInformation(event) {
 /* 
 Forward a request for a refresh token onto the OAuth endpoint
 */
-function forwardRefreshToken(event, context, tokenEndpoint, encodeIdToken, fallbackUrl) {
+function forwardRefreshToken(event, context, tokenEndpoint, encodeIdToken) {
 
     superagent
         .post(tokenEndpoint)
@@ -146,25 +155,9 @@ function forwardRefreshToken(event, context, tokenEndpoint, encodeIdToken, fallb
         .send(event.body) // 
         .end(function(error, response) {
             if (error) {
-                if (401 == error.status && fallbackUrl) {
-                    // if have a fallbackUrl call forward again 
-                    // Use fallback when may have new token refresh url was called but
-                    // refresh token was created originally on the fallbackUrl
-                    // until all of the refresh_tokens on the fallbackUrl have expired.
-                    let bodyJson = htmlFormDecode(event.body);
-                    logger.log(context, "!!Error: getting refresh token.  will try fallback " + JSON.stringify(error));
-
-                    // Fixup to v1.0 endpoint
-                    bodyJson["client_id"] = config.settings("authv10_client_id");
-                    bodyJson["client_secret"] = config.settings("authv10_client_secret");
-                    event.body = htmlFormEncode(bodyJson);
-
-                    forwardRefreshToken(event, context, fallbackUrl, encodeIdToken);
-                    return;
-                } else {
-                    logger.log(context, "!!Error: getting refresh token. " + JSON.stringify(error));
-                }
-            } else {
+                logger.log(context, "!!Error: getting refresh token. " + JSON.stringify(error));
+            } 
+            else {
                 // Encode the access token.
                 response.body.access_token = authHelper.encodeTokenInformation(
                     context,
@@ -247,6 +240,14 @@ function GetV20AuthorizationTemplateProperties(event, context) {
     var requestInfo = GetRequestInformation(event);
     var authorizeQuery = event.queryStringParameters;
 
+    // remove the Google Action code challenges if present.
+    //  "code_challenge_method": "S256",
+    // "code_challenge": "5C4yVkRmsov2WK-yfxeOaWzeIzbTC6VRKO44lGihxYU"
+    // event.queryStringParameters["code_challenge_method"] = "challengeMethod";
+
+    delete authorizeQuery["code_challenge_method"];
+    delete authorizeQuery["code_challenge"];
+
     // Build the adal Url.
     var adalLoginUrl = "https://login.windows.net/common/oauth2/v2.0/authorize" + '?' + htmlFormEncode(authorizeQuery);
 
@@ -254,6 +255,8 @@ function GetV20AuthorizationTemplateProperties(event, context) {
     var props = {
         'adalLoginUrl': adalLoginUrl
     };
+
+    console.log("temp: props: " + JSON.stringify(props));
 
     return props;
 }
@@ -264,6 +267,8 @@ exports.handler = function(event, context) {
 
     var resourcePath = event.resource;
 
+    console.log("webRequest: " + JSON.stringify(event));
+
     // Api gateway seems case-sensitive on Urls but may have to revisit if need comparison
     switch (resourcePath) {
         case '/common/oauth2/token':
@@ -273,8 +278,7 @@ exports.handler = function(event, context) {
             forwardRefreshToken(event, context, "https://login.windows.net/common/oauth2/token", false /* encodeIdToken */ );
             break;
         case '/common/oauth2/v2.0/googletoken':
-            forwardRefreshToken(event, context, "https://login.windows.net/common/oauth2/v2.0/token", true /* encodeIdToken */ ,
-                "https://login.windows.net/common/oauth2/token");
+            forwardRefreshToken(event, context, "https://login.windows.net/common/oauth2/v2.0/token", true /* encodeIdToken */ );
             break;
         case '/common/oauth2/authorize':
             var props = GetAuthorizationTemplateProperties(event, context);
@@ -293,6 +297,9 @@ exports.handler = function(event, context) {
             break;
         case '/web/googleprivacy':
             renderTemplate(event, context, googlePrivacyTemplateName, null);
+            break;
+        case '/web/wordoftheweek/privacy':
+            renderTemplate(event, context, wordOfTheWeekPrivacyTemplateName, null, wordOfTheWeektemplatefolder);
             break;
         default:
             // Future: add a general page missing or route to a home page.

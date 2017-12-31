@@ -7,7 +7,7 @@ The request comes in from Amazaon Gateway services with lambda proxy integration
 "use strict";
 
 var googleActions = require("actions-on-google");
-var ApiAssistant = googleActions.ApiAiAssistant;
+var DialogflowApp = googleActions.DialogflowApp;
 var moment = require('moment');
 var jwt = require("jwt-simple");
 
@@ -51,7 +51,17 @@ function responseHandlerGetEvents(context, assistant) {
 
     let accessToken;
     if (userInfo) {
-        accessToken = userInfo.access_token;
+
+        // Google changed from access_token to accessToken in latest SDK
+        // check for both while transitioning.
+        if (userInfo.accessToken)
+        {
+            accessToken = userInfo.accessToken;
+        }
+        else
+        {
+            accessToken = userInfo.access_token;
+        }
     }
 
     // if no access token then tell the user about linking.
@@ -243,14 +253,14 @@ exports.handler = function(event, context) {
         }
     };
 
-    // Create an ApiAssistant to handle the request
-    const assistant = new ApiAssistant({ request: req, response: res });
+    // Create an DialogflowApp to handle the request
+    const dialogFlowApp = new DialogflowApp({ request: req, response: res });
 
     // setup the response Handlers.
-    function responseHandlerGetEventsStub(assistant) {
-        responseHandlerGetEvents(googleActioncontext, assistant);
+    function responseHandlerGetEventsStub(dialogFlowApp) {
+        responseHandlerGetEvents(googleActioncontext, dialogFlowApp);
     }
 
-    // Call the ApiAssistant to handle the request.
-    assistant.handleRequest(responseHandlerGetEventsStub);
+    // Call the DialogflowApp to handle the request.
+    dialogFlowApp.handleRequest(responseHandlerGetEventsStub);
 };

@@ -5,6 +5,7 @@ var logger = require('./common/logger');
 
 // Lambdas to route to.
 var fetchLambda = require('./alexaskill/index');
+var wordoftheweekLambda = require('./wordoftheweek/alexaskill');
 var fetchActionLambda = require('./googleaction/index');
 var webLambda = require('./web/index.js');
 
@@ -72,6 +73,9 @@ exports.handler = function(event, context) {
         case '/skills/fetch':
             routeLambdaNoProxy(event, context, fetchLambda.handler);
             break;
+        case '/skills/wordoftheweek':
+            routeLambdaNoProxy(event, context, wordoftheweekLambda.handler);
+            break;
         case '/actions/fetch':
             fetchActionLambda.handler(event, context);
             break;
@@ -87,4 +91,11 @@ Lambda Router for when fetch skill called directly from Amazon Lambda.
 */
 exports.fetchLambdaDirect = function(event, context) {
     fetchLambda.handler(event, context);
+}
+
+/*
+Lambda Router for when WordOfTheWeek skill called directly from Amazon Lambda.
+*/
+exports.wordOfTheWeekLambdaDirect = function(event, context) {
+    wordoftheweekLambda.handler(event, context);
 }

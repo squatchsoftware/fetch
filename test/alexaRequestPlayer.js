@@ -3,6 +3,7 @@ var assert = require('assert');
 var fs = require('fs');
 var jwt = require("jwt-simple");
 var uuid = require('uuid');
+var jsonCompare = require('json-compare')
 
 // Globals
 // Future: consider .config file// output directory to use for persisting Recordings.
@@ -51,16 +52,26 @@ exports.runSkillRequestTestFile = function runSkillRequestTestFile(skillRequestF
     // invoke the Skill
     var context = {
         succeed: function(response) {
+ 
+            // Future: AWS started adding a userAgent property to the response.
+            // removing the userAgent from the response so don't have to update all the test
+            // files as well as the userAgent contains the Node version.
+            // Consider int he future calculating this value same as AWS before comparing.
+            delete response["userAgent"];
 
-            var expectedOutputString = JSON.stringify(expectedServiceResponseSucceed);
-            var reponseString = JSON.stringify(response);
-
-            if (expectedOutputString != reponseString) {
+            // Compare the JSON data
+            var compareResults = jsonCompare(expectedServiceResponseSucceed, response);
+            if (!compareResults.isMatch)
+            {
+                // if no match then log out the JSON objects for debugging and assert.equal
+                // to fail the test.
+                var expectedOutputString = JSON.stringify(expectedServiceResponseSucceed);
+                var reponseString = JSON.stringify(response);
                 console.log(expectedOutputString);
                 console.log(reponseString);
+ 
+                assert.equal(expectedOutputString, reponseString);
             }
-
-            assert.equal(expectedOutputString, reponseString);
 
             fetch.setMicrosoftGraph(originalGraphClient); // Set back the graph client.
             done();

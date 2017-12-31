@@ -11,26 +11,26 @@
     "readme": "README.md",
     "main": "index.js",
     "dependencies": {
+        "@microsoft/microsoft-graph-client": "^1.0.0",
+        "actions-on-google": "^1.0.0",
+        "alexa-app": "^4.2.0",
+        "alexa-sdk": "^1.0.0",
+        "async": "^2.1.5",
         "body-parser": "^1.13.1",
-        "superagent": "~3.3.0",
         "ejs": "^2.3.1",
         "express": "^4.13.0",
-        "alexa-app": "^2.4.0",
-        "alexa-sdk": "^1.0.0",
-        "@microsoft/microsoft-graph-client": "^0.3.2",
+        "jsmin": "^1.0.1",
+        "json-compare": "0.0.15",
+        "jwt-simple": "^0.5.1",
         "moment": "^2.17.1",
         "moment-timezone": "^0.5.11",
-        "uuid": "^3.0.1",
-        "jwt-simple": "^0.5.1",
-        "crypto": "^0.0.3",
-        "async": "^2.1.5",
-        "jsmin": "^1.0.1",
-        "actions-on-google": "^1.0.0"
+        "superagent": "~3.8.2",
+        "uuid": "^3.0.1"
     },
     "scripts": {
         "test": "mocha"
     },
     "devDependencies": {
-        "mocha": "^3.2.0"
+        "mocha": "^4.0.1"
     }
 }
