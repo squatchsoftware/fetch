@@ -37,7 +37,7 @@ var piiScrub = false;
 var allowedAppIds = config.settings("allowedAppIds");
 
 // get list of preview users
-var alexaPreviewUsers = config.settings("alexaPreviewUsers");
+var alexaPreviewUsers = config.settings("alexaPreviewUsers", true /* allowEmpty */);
 
 // Skills name
 var skillName = "<s>This is the word of the week</s>";
@@ -46,7 +46,7 @@ var skillName = "<s>This is the word of the week</s>";
 var welcomeMessage = "<s>You can ask what is the word of the week</s> <s>To exit you can say cancel</s>";
 
 /*
-Example phrases: (todo: try Open the word of the week)
+Example phrases:
 Alexa, open Word of the Week
 Alexa, ask Word of the Week what is the word of the week
 Alexa, ask word of the Week how to submit a word
@@ -56,10 +56,6 @@ Alexa, ask word of the Week how to submit a word
 var helpMessage =
     "<s>You can ask what is the word of the week</s>" +
     "<s>or to find out how to submit a word ask how do I submit a word of the week</s>" +
-    /*    "<s>what do I have tomorrow</s>" +
-        "<s>what is happening this evening</s>" +
-        "<s>what is on my calendar on Tuesday</s>" +
-        "<s>what is scheduled on May 14th</s>" + */
     "";
 
 // Used to tell user skill is closing
@@ -229,7 +225,7 @@ future: should be common code so move if another skill users.
 function IsAlexaPreviewUserRequest(context, sessionHandler) {
 
     let userId = sessionHandler.event.session.user.userId;
-    let previewUser = alexaPreviewUsers[userId];
+    let previewUser = alexaPreviewUsers ?  alexaPreviewUsers[userId] : null;
 
     if (previewUser) {
         // alexaPreviewUsers

@@ -19,7 +19,7 @@ if (configFileUserOverride && fs.existsSync(configFileUserOverride)) {
 Configuration information 
 */
 
-exports.settings = function settings(propName) {
+exports.settings = function settings(propName, allowEmpty) {
 
     // check environment variable for override
     var propValue = process.env[propName];
@@ -31,7 +31,7 @@ exports.settings = function settings(propName) {
     }
 
     // if still undefined throw an error
-    if (undefined == propValue) {
+    if (undefined == propValue && !allowEmpty) {
         throw "unknown config property: " + propName;
     }
 

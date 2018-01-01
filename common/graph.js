@@ -250,11 +250,11 @@ function getCalendarView(context, startDate, endDate, userTimeZone, accessToken,
                     startTime = moment.tz(ev.start.dateTime, startTimeZone);
                     endTime = moment.tz(ev.end.dateTime, startTimeZone);
                 }
-
+           
                 var eventData = {
                     id: ev.id, // unique id of the event
                     summary: (null != ev.subject) ? ev.subject : "no subject",
-                    location: (null != ev.location.displayName) ? ev.location.displayName : "no location",
+                    location: (null != ev.location.displayName) ? ev.location.displayName : null,
                     description: (null != ev.bodyPreview) ? ev.bodyPreview : "no body",
 
                     // start are in a non UTC dateTime format with a timeZone.
@@ -443,6 +443,10 @@ var fetchEventsServiceResponse = {
                     outputText += "<s>";
                     outputText += prefix;
                     outputText += curEvent.summary;
+                    if (curEvent.location)
+                    {
+                        outputText += "</s><s>The meeting location is " + curEvent.location;
+                    }
                     outputText += "</s>";
                     prefix = " and "
                 }
@@ -475,6 +479,10 @@ var fetchEventsServiceResponse = {
                     outputText += (curEvent.isAllDay) ? "all day" : "at " + moment.tz(curEvent.start, fetchEventContext.timeZoneName).format("hh:mm A");
                     outputText += " there is ";
                     outputText += curEvent.summary;
+                    if (curEvent.location)
+                    {
+                        outputText += "</s><s>The meeting location is " + curEvent.location;
+                    }
                     outputText += "</s>";
                     prefix = "and ";
                 }
