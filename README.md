@@ -5,3 +5,6 @@ Fetch is deployed as an Amazon Lambda function and connects to Office data throu
 
 The Fetch team would love to hear your feedback and ideas. You can open an issue here on Github or email as at [squatchsoftware@outlook.com](mailto:squatchsoftware@outlook.com).
 
+Directions for setting up for Google Home can be found at:
+[Google Home Setup](https://github.com/squatchsoftware/fetch/wiki/Google-Home-Setup)
+
